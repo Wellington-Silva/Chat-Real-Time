@@ -1,0 +1,25 @@
+{
+  "name": "Chat-Real-Time",
+  "version": "1.0.0",
+  "description": "Chat in real time with nodejs and typescript",
+  "main": "server.ts",
+  "repository": "https://github.com/Wellington-Silva/Chat-Real-Time.git",
+  "author": "Wellington-Silva <wellingtonsilva112000@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev src/server.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@types/express": "^5.0.0",
+    "globals": "^15.12.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.13.0"
+  }
+}

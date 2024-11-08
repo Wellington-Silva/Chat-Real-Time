@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": ["ES2016"],
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist"
+  }
+}
