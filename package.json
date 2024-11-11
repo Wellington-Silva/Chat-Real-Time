@@ -7,12 +7,18 @@
   "author": "Wellington-Silva <wellingtonsilva112000@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/server.js",
-    "dev": "ts-node-dev src/server.ts"
+    "start": "nodemon --transpile-only server.ts",
+    "dev": "ts-node-dev server.ts",
+    "typeorm": "ts-node-dev node_modules/.bin/typeorm"
   },
   "dependencies": {
+    "@types/nodemon": "^1.19.6",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "mysql2": "^3.11.4",
+    "nodemon": "^3.1.7",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
