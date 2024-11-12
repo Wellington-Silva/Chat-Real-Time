@@ -12,4 +12,13 @@ export class UserRepository {
   async findAllUsers() {
     return await this.userRepo.find();
   }
+
+  async findByEmail(email: string) {
+    return await this.userRepo.findOne({ where: { email } });
+  }
+
+  async findById(id: number) {
+    return await this.userRepo.findOne({ where: { id } });
+  };
+  
 }
