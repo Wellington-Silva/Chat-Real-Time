@@ -1,4 +1,6 @@
+import "dotenv/config";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { UserRepository } from "../repository/UserRepository";
 
 const userRepository = new UserRepository();
@@ -26,8 +28,24 @@ class UserService {
         const user = await userRepository.createUser({ name, picture, email, password: hashedPassword });
 
         // Create token JWT
+        const userJWT = {
+            id: user.id,
+            name: user.name,
+            picture: user.picture,
+            email: user.email,
+            password: user.password
+        };
 
-        if (user) return user;
+        if (user) {
+            const token = jwt.sign(
+                userJWT,
+                process.env.JWT_SECRET as string,
+                { expiresIn: process.env.JWT_EXPIRATION || "5d" } // 5 dia de expiração
+            );
+            
+            // Retorna o usuário e o token
+            return { user, token };
+        };
         return { error: true, message: "Erro ao cadastrar usuário" };
     };
 

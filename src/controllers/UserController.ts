@@ -25,6 +25,7 @@ class UserController {
     };
 
     async showUser(req: Request, res: Response) {
+
         const id = Number(req.query.id);
 
         try {
@@ -41,6 +42,7 @@ class UserController {
             const userCreated = await UserService.create(name, picture, email, password);
             res.status(201).json(userCreated);
         } catch (error) {
+            console.log(error)
             res.status(500).json({ error: true, message: "Erro ao cadastrar usuário" })
         }
     };

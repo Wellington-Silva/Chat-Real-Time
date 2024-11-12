@@ -14,18 +14,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserService_1 = __importDefault(require("../services/UserService"));
 ;
+;
 class UserController {
     listAllUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield UserService_1.default.getAll();
-            res.json(users);
+            try {
+                const users = yield UserService_1.default.getAll();
+                res.json(users);
+            }
+            catch (error) {
+                res.status(500).json({ error: true, message: "Erro ao buscar usuários" });
+            }
         });
     }
+    ;
+    showUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = Number(req.query.id);
+            try {
+                const user = yield UserService_1.default.getUserById(id);
+                res.json(user);
+            }
+            catch (error) {
+                res.status(500).json({ error: true, message: "Erro ao buscar usuário" });
+            }
+        });
+    }
+    ;
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, email, password, picture } = req === null || req === void 0 ? void 0 : req.body;
             try {
-                console.log(req.body);
                 const userCreated = yield UserService_1.default.create(name, picture, email, password);
                 res.status(201).json(userCreated);
             }
@@ -37,9 +56,13 @@ class UserController {
     ;
     signin(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { email, password } = req === null || req === void 0 ? void 0 : req.body;
+            const userToken = yield UserService_1.default.signin(email, password);
+            res.json({ message: "Login bem-sucedido", userToken });
         });
     }
     ;
 }
+;
 exports.default = new UserController();
 //# sourceMappingURL=UserController.js.map

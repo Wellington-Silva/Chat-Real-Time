@@ -3,7 +3,22 @@ declare class UserService {
         error: boolean;
         message: string;
     }>;
-    create(name: string, picture: string, email: string, password: string): Promise<import("../entity/User").User | {
+    getUserById(id: number): Promise<import("../entity/User").User | {
+        error: boolean;
+        message: string;
+    }>;
+    create(name: string, picture: string, email: string, password: string): Promise<{
+        user: import("../entity/User").User;
+        token: string;
+        error?: undefined;
+        message?: undefined;
+    } | {
+        error: boolean;
+        message: string;
+        user?: undefined;
+        token?: undefined;
+    }>;
+    signin(email: string, password: string): Promise<boolean | {
         error: boolean;
         message: string;
     }>;

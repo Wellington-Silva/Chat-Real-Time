@@ -27,6 +27,17 @@ class UserRepository {
             return yield this.userRepo.find();
         });
     }
+    findByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.userRepo.findOne({ where: { email } });
+        });
+    }
+    findById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.userRepo.findOne({ where: { id } });
+        });
+    }
+    ;
 }
 exports.UserRepository = UserRepository;
 //# sourceMappingURL=UserRepository.js.map
