@@ -12,6 +12,4 @@ router.post("/", UserController.register);
 router.get("/", authMiddleware, UserController.listAllUsers);
 router.get("/show", authMiddleware, UserController.showUser);
 
-// Chat
-
 export default router;
