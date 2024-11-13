@@ -1,11 +1,17 @@
 import { Router } from "express";
+import authMiddleware from "../middlewares/jwt";
 import UserController from "../controllers/UserController";
 
 const router = Router();
 
-router.post("/", UserController.register);
-router.get("/", UserController.listAllUsers);
-router.get("/show", UserController.showUser);
+// Auth
 router.post("/signin", UserController.signin);
+
+// User
+router.post("/", UserController.register);
+router.get("/", authMiddleware, UserController.listAllUsers);
+router.get("/show", authMiddleware, UserController.showUser);
+
+// Chat
 
 export default router;

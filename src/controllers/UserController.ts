@@ -16,6 +16,7 @@ interface IAuth {
 class UserController {
 
     async listAllUsers(req: Request, res: Response) {
+        (req as any).user;
         try {
             const users = await UserService.getAll();
             res.json(users);

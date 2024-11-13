@@ -40,9 +40,9 @@ class UserService {
             const token = jwt.sign(
                 userJWT,
                 process.env.JWT_SECRET as string,
-                { expiresIn: process.env.JWT_EXPIRATION || "5d" } // 5 dia de expiração
+                // { expiresIn: process.env.JWT_EXPIRATION || "5d" } // 5 dia de expiração
             );
-            
+
             // Retorna o usuário e o token
             return { user, token };
         };
@@ -50,16 +50,35 @@ class UserService {
     };
 
     async signin(email: string, password: string) {
+
+        // Find user by email
         const user = await userRepository.findByEmail(email);
-        if (!user) return { error: true, message: "Usuário não encontrado" };
+        if (!user) 
+            return { error: true, message: "Usuário não encontrado" };
 
-        // Compara a senha fornecida com o hash armazenado
+        // Compare password with hash armazened
         const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid)
+            return { error: true, message: "Senha incorreta" };
 
-        // transformar user em token jwt
-        
-        return isPasswordValid;
-    };
+        // Create the token JWT
+        const userJWT = {
+            id: user.id,
+            name: user.name,
+            picture: user.picture,
+            email: user.email,
+            password: user.password
+        };
+
+        const token = jwt.sign(
+            userJWT,
+            process.env.JWT_SECRET as string,
+            // { expiresIn: process.env.JWT_EXPIRATION || "5d" } // Expira em 5 dias por padrão
+        );
+
+        // Return token and basic data of user
+        return { token, user: { id: user.id, name: user.name, email: user.email, picture: user.picture } };
+    }
 
 };
 
