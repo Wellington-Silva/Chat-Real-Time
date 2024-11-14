@@ -1,5 +1,6 @@
 // src/entity/User.ts
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Message } from './Message';
 
 @Entity("users")
 export class User {
@@ -17,5 +18,13 @@ export class User {
 
   @Column()
   password: string;
+
+   // Relacionamento com mensagens enviadas
+   @OneToMany(() => Message, (message) => message.sender)
+   sentMessages: Message[];
+ 
+   // Relacionamento com mensagens recebidas
+   @OneToMany(() => Message, (message) => message.recipient)
+   receivedMessages: Message[];
 
 }
