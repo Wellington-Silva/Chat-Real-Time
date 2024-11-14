@@ -1,8 +1,8 @@
 // src/controller/IoController.ts
+import { User } from '../entity/User';
 import { Request, Response } from 'express';
 import { IoService } from '../services/IoService';
 import { AppDataSource } from '../../data-source';
-import { User } from '../entity/User';
 
 const ioService = new IoService();
 
@@ -24,10 +24,9 @@ class IoController {
             // Salva a mensagem no banco de dados
             const message = await ioService.saveMessage(content, sender, recipient);
 
-            // Retorna a resposta
-            return res.status(200).json({ message });
-        } catch (error) {
-            return res.status(500).json({ message: 'Erro ao enviar a mensagem', error });
+            res.status(201).json({ error: false, message });
+        } catch (e) {
+            return res.status(500).json({ error: true, message: 'Erro ao enviar a mensagem', e });
         }
     };
 
@@ -40,8 +39,8 @@ class IoController {
             const messages = await ioService.getMessagesBetweenUsers(Number(user1Id), Number(user2Id));
 
             return res.status(200).json(messages);
-        } catch (error) {
-            return res.status(500).json({ message: 'Erro ao obter histórico de mensagens', error });
+        } catch (e) {
+            return res.status(500).json({ error: true, message: 'Erro ao obter histórico de mensagens', e });
         }
     };
 
@@ -50,7 +49,7 @@ class IoController {
             console.log('Mensagem recebida:', msg);
             socket.emit('message', `Echo: ${msg}`);
         });
-    }
-}
+    };
+};
 
 export default new IoController();
