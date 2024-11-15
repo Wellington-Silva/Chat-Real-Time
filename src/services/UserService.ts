@@ -1,6 +1,8 @@
 import "dotenv/config";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { User } from "../entity/User";
+import { AppDataSource } from "../../data-source";
 import { UserRepository } from "../repository/UserRepository";
 
 const userRepository = new UserRepository();
@@ -43,6 +45,9 @@ class UserService {
                 // { expiresIn: process.env.JWT_EXPIRATION || "5d" } // 5 dia de expiração
             );
 
+            // Atualizar o status do usuário para online após a criação
+            await AppDataSource.getRepository(User).update(user.id, { isOnline: true });
+
             // Retorna o usuário e o token
             return { user, token };
         };
@@ -76,9 +81,12 @@ class UserService {
             // { expiresIn: process.env.JWT_EXPIRATION || "5d" } // Expira em 5 dias por padrão
         );
 
+        // Atualizar o status para online
+        await AppDataSource.getRepository(User).update(user.id, { isOnline: true });
+
         // Return token and basic data of user
         return { token, user: { id: user.id, name: user.name, email: user.email, picture: user.picture } };
-    }
+    };
 
 };
 

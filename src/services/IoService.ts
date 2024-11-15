@@ -1,7 +1,6 @@
-// src/services/IoService.ts
-import { AppDataSource } from '../../data-source';
-import { Message } from '../entity/Message';
 import { User } from '../entity/User';
+import { Message } from '../entity/Message';
+import { AppDataSource } from '../../data-source';
 
 export class IoService {
     private messageRepository = AppDataSource.getRepository(Message);
@@ -14,7 +13,7 @@ export class IoService {
         });
         await this.messageRepository.save(message);
         return message;
-    }
+    };
 
     async getMessagesBetweenUsers(user1Id: number, user2Id: number) {
         return this.messageRepository.find({
@@ -25,5 +24,5 @@ export class IoService {
             relations: ['sender', 'recipient'],
             order: { createdAt: 'ASC' },
         });
-    }
-}
+    };
+};

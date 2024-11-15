@@ -14,7 +14,10 @@ export const AppDataSource = new DataSource({
     database: "chat",
     synchronize: true,
     logging: false,
-    entities: [User, Message], // Inclua a entidade Message
+    entities: [User, Message],
     migrations: [],
     subscribers: [],
+    extra: {
+        connectionLimit: 10,
+    },
 });

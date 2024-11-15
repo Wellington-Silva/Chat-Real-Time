@@ -18,6 +18,7 @@ const UserService_1 = __importDefault(require("../services/UserService"));
 class UserController {
     listAllUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            req.user;
             try {
                 const users = yield UserService_1.default.getAll();
                 res.json(users);
@@ -49,6 +50,7 @@ class UserController {
                 res.status(201).json(userCreated);
             }
             catch (error) {
+                console.log(error);
                 res.status(500).json({ error: true, message: "Erro ao cadastrar usuário" });
             }
         });

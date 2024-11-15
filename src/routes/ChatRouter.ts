@@ -1,4 +1,3 @@
-// src/routes/ChatRouter.ts
 import { Router, Request, Response } from 'express';
 import IoController from '../controllers/IoController';
 import asyncHandler from '../middlewares/asyncHandler';

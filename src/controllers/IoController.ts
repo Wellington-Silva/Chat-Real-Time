@@ -1,4 +1,3 @@
-// src/controller/IoController.ts
 import { User } from '../entity/User';
 import { Request, Response } from 'express';
 import { IoService } from '../services/IoService';
@@ -44,12 +43,12 @@ class IoController {
         }
     };
 
-    socketHandler(socket: any) {
-        socket.on('message', (msg: string) => {
-            console.log('Mensagem recebida:', msg);
-            socket.emit('message', `Echo: ${msg}`);
-        });
-    };
+    // socketHandler(socket: any) {
+    //     socket.on('message', (msg: string) => {
+    //         console.log('Mensagem recebida:', msg);
+    //         socket.emit('message', `Echo: ${msg}`);
+    //     });
+    // };
 };
 
 export default new IoController();

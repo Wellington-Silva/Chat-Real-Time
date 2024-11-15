@@ -1,14 +1,16 @@
+import "dotenv/config";
+import { User } from "../entity/User";
 declare class UserService {
-    getAll(): Promise<import("../entity/User").User[] | {
+    getAll(): Promise<User[] | {
         error: boolean;
         message: string;
     }>;
-    getUserById(id: number): Promise<import("../entity/User").User | {
+    getUserById(id: number): Promise<User | {
         error: boolean;
         message: string;
     }>;
     create(name: string, picture: string, email: string, password: string): Promise<{
-        user: import("../entity/User").User;
+        user: User;
         token: string;
         error?: undefined;
         message?: undefined;
@@ -18,9 +20,21 @@ declare class UserService {
         user?: undefined;
         token?: undefined;
     }>;
-    signin(email: string, password: string): Promise<boolean | {
+    signin(email: string, password: string): Promise<{
         error: boolean;
         message: string;
+        token?: undefined;
+        user?: undefined;
+    } | {
+        token: string;
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            picture: string;
+        };
+        error?: undefined;
+        message?: undefined;
     }>;
 }
 declare const _default: UserService;

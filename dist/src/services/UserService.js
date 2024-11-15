@@ -12,8 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const User_1 = require("../entity/User");
+const data_source_1 = require("../../data-source");
 const UserRepository_1 = require("../repository/UserRepository");
 const userRepository = new UserRepository_1.UserRepository();
 class UserService {
@@ -50,8 +53,9 @@ class UserService {
                 password: user.password
             };
             if (user) {
-                const token = jsonwebtoken_1.default.sign(userJWT, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION || "5d" } // 5 dia de expiração
-                );
+                const token = jsonwebtoken_1.default.sign(userJWT, process.env.JWT_SECRET);
+                // Atualizar o status do usuário para online após a criação
+                yield data_source_1.AppDataSource.getRepository(User_1.User).update(user.id, { isOnline: true });
                 // Retorna o usuário e o token
                 return { user, token };
             }
@@ -62,13 +66,27 @@ class UserService {
     ;
     signin(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Find user by email
             const user = yield userRepository.findByEmail(email);
             if (!user)
                 return { error: true, message: "Usuário não encontrado" };
-            // Compara a senha fornecida com o hash armazenado
+            // Compare password with hash armazened
             const isPasswordValid = yield bcryptjs_1.default.compare(password, user.password);
-            // transformar user em token jwt
-            return isPasswordValid;
+            if (!isPasswordValid)
+                return { error: true, message: "Senha incorreta" };
+            // Create the token JWT
+            const userJWT = {
+                id: user.id,
+                name: user.name,
+                picture: user.picture,
+                email: user.email,
+                password: user.password
+            };
+            const token = jsonwebtoken_1.default.sign(userJWT, process.env.JWT_SECRET);
+            // Atualizar o status para online
+            yield data_source_1.AppDataSource.getRepository(User_1.User).update(user.id, { isOnline: true });
+            // Return token and basic data of user
+            return { token, user: { id: user.id, name: user.name, email: user.email, picture: user.picture } };
         });
     }
     ;

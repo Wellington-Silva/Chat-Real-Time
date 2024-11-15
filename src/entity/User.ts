@@ -12,19 +12,22 @@ export class User {
 
   @Column()
   picture: string;
-  
+
   @Column()
   email: string;
 
   @Column()
   password: string;
 
-   // Relacionamento com mensagens enviadas
-   @OneToMany(() => Message, (message) => message.sender)
-   sentMessages: Message[];
- 
-   // Relacionamento com mensagens recebidas
-   @OneToMany(() => Message, (message) => message.recipient)
-   receivedMessages: Message[];
+  // Relacionamento com mensagens enviadas
+  @OneToMany(() => Message, (message) => message.sender)
+  sentMessages: Message[];
 
-}
+  // Relacionamento com mensagens recebidas
+  @OneToMany(() => Message, (message) => message.recipient)
+  receivedMessages: Message[];
+
+  @Column({ default: false })
+  isOnline: boolean;
+
+};
