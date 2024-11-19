@@ -1,5 +1,6 @@
 import "dotenv/config";
 import http from 'http';
+import path from 'path';
 import "reflect-metadata";
 import express from "express";
 import { Server } from 'socket.io';
@@ -21,7 +22,16 @@ const io = new Server(server, {
     },
 });
 
+// Servir arquivos estáticos
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Rota padrão
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/chat-client.html'));
+});
+
 io.on('connection', async (socket) => {
+    console.log('Usuário conectado:', socket.id);
     SocketHandler.socketHandler(socket);
     const userId = socket.handshake.query.userId;
 
@@ -35,7 +45,7 @@ io.on('connection', async (socket) => {
             await AppDataSource.getRepository(User).update(userId, { isOnline: false });
             console.log(`Usuário ${userId} está offline`);
         });
-    }
+    };
 });
 
 AppDataSource.initialize()

@@ -42,13 +42,7 @@ class IoController {
             return res.status(500).json({ error: true, message: 'Erro ao obter histórico de mensagens', e });
         }
     };
-
-    // socketHandler(socket: any) {
-    //     socket.on('message', (msg: string) => {
-    //         console.log('Mensagem recebida:', msg);
-    //         socket.emit('message', `Echo: ${msg}`);
-    //     });
-    // };
+    
 };
 
 export default new IoController();

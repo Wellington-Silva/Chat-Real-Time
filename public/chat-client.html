@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste do Chat</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+
+<body>
+  <h1>Chat de Teste</h1>
+  <input type="text" id="senderId" placeholder="ID do Remetente">
+  <input type="text" id="recipientId" placeholder="ID do Destinatário">
+  <input type="text" id="messageContent" placeholder="Mensagem">
+  <button onclick="sendMessage()">Enviar Mensagem</button>
+
+  <h2>Mensagens</h2>
+  <div id="messages"></div>
+
+  <script>
+    const socket = io('http://localhost:3333');
+
+    socket.on('connect', () => {
+      console.log('Conectado ao servidor do chat');
+    });
+
+    function sendMessage() {
+      const senderId = document.getElementById('senderId').value.trim();
+      const recipientId = document.getElementById('recipientId').value.trim();
+      const content = document.getElementById('messageContent').value.trim();
+
+      if (!senderId || !recipientId || !content) {
+        alert('Por favor, preencha todos os campos antes de enviar!');
+        return;
+      };
+
+      // Emite a mensagem para o servidor
+      console.log('Enviando mensagem:', { senderId, recipientId, content });
+      socket.emit('message', { senderId, recipientId, content });
+      document.getElementById('messageContent').value = ''; // Limpa o campo
+    };
+
+    // // Exibir mensagens recebidas do servidor
+    // socket.on('message', (data) => {
+    //   console.log('Mensagem recebida do servidor:', data); // Adicione este log
+    //   const messagesDiv = document.getElementById('messages');
+    //   const newMessage = document.createElement('p');
+    //   newMessage.textContent = `De ${data.senderId} para ${data.recipientId}: ${data.content}`;
+    //   messagesDiv.appendChild(newMessage);
+    // });
+
+    // socket.on('userStatusChange', (data) => {
+    //   const messagesDiv = document.getElementById('messages');
+    //   const statusMessage = document.createElement('p');
+    //   statusMessage.textContent = `Usuário ${data.userId} está agora ${data.isOnline ? 'online' : 'offline'}`;
+    //   messagesDiv.appendChild(statusMessage);
+    // });
+
+    // function getMessages() {
+    //   const senderId = document.getElementById('senderId').value.trim();
+    //   const recipientId = document.getElementById('recipientId').value.trim();
+    //   if (!senderId || !recipientId) {
+    //     alert('Por favor, preencha os IDs para buscar o histórico!');
+    //     return;
+    //   };
+    //   socket.emit('getMessages', { user1Id: senderId, user2Id: recipientId });
+    // };
+
+    // socket.on('messageHistory', (messages) => {
+    //   const messagesDiv = document.getElementById('messages');
+    //   messagesDiv.innerHTML = ''; // Limpa o histórico antes de carregar
+    //   messages.forEach((msg) => {
+    //     const newMessage = document.createElement('p');
+    //     newMessage.textContent = `De ${msg.senderId} para ${msg.recipientId}: ${msg.content}`;
+    //     messagesDiv.appendChild(newMessage);
+    //   });
+    // });
+  </script>
+</body>
+
+</html>

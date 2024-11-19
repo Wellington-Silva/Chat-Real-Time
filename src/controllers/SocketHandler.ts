@@ -10,7 +10,7 @@ class SocketHandler {
 
         socket.on('message', (msg: string) => {
             console.log('Mensagem recebida:', msg);
-            socket.emit('message', `Echo: ${msg}`);
+            socket.broadcast.emit('message', `Echo: ${msg}`);
         });
 
         // Atualiza o status para "online" e emite o evento de mudança de status

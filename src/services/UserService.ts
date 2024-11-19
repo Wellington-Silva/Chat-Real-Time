@@ -23,13 +23,10 @@ class UserService {
 
     async create(name: string, picture: string, email: string, password: string) {
 
-        // Create hash
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Save
         const user = await userRepository.createUser({ name, picture, email, password: hashedPassword });
 
-        // Create token JWT
         const userJWT = {
             id: user.id,
             name: user.name,
@@ -48,7 +45,6 @@ class UserService {
             // Atualizar o status do usuário para online após a criação
             await AppDataSource.getRepository(User).update(user.id, { isOnline: true });
 
-            // Retorna o usuário e o token
             return { user, token };
         };
         return { error: true, message: "Erro ao cadastrar usuário" };
@@ -56,7 +52,6 @@ class UserService {
 
     async signin(email: string, password: string) {
 
-        // Find user by email
         const user = await userRepository.findByEmail(email);
         if (!user) 
             return { error: true, message: "Usuário não encontrado" };
@@ -66,7 +61,6 @@ class UserService {
         if (!isPasswordValid)
             return { error: true, message: "Senha incorreta" };
 
-        // Create the token JWT
         const userJWT = {
             id: user.id,
             name: user.name,
@@ -84,7 +78,6 @@ class UserService {
         // Atualizar o status para online
         await AppDataSource.getRepository(User).update(user.id, { isOnline: true });
 
-        // Return token and basic data of user
         return { token, user: { id: user.id, name: user.name, email: user.email, picture: user.picture } };
     };
 
