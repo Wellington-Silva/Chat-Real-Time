@@ -8,7 +8,9 @@
     "forceConsistentCasingInFileNames": false,
     "strict": true,
     "skipLibCheck": true,
-    "lib": ["ES2016"],
+    "lib": [
+      "ES2016"
+    ],
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,

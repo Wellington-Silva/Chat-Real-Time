@@ -8,6 +8,7 @@ import { User } from "./src/entity/User";
 import { AppDataSource } from './data-source';
 import UserRouter from "./src/routes/UserRouter";
 import chatRouter from './src/routes/ChatRouter';
+import roomRouter from "./src/routes/RoomRouter";
 import statusRouter from './src/routes/StatusRouter';
 import SocketHandler from "./src/controllers/SocketHandler";
 
@@ -25,14 +26,14 @@ const io = new Server(server, {
 // Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Rota padrão
+// Default route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './public/chat-client.html'));
 });
 
 io.on('connection', async (socket) => {
     console.log('Usuário conectado:', socket.id);
-    SocketHandler.socketHandler(socket);
+    SocketHandler.socketHandler(socket, io);
     const userId = socket.handshake.query.userId;
 
     if (userId) {
@@ -55,6 +56,7 @@ AppDataSource.initialize()
         app.use("/chat", chatRouter);
         app.use("/users", UserRouter);
         app.use("/status", statusRouter);
+        app.use("/room", roomRouter);
 
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => console.log(`Server running in port ${PORT}`));

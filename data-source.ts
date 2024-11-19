@@ -3,6 +3,7 @@ import "dotenv/config";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "./src/entity/User";
+import { Room } from "./src/entity/Room";
 import { Message } from "./src/entity/Message";
 
 export const AppDataSource = new DataSource({
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
     database: "chat",
     synchronize: true,
     logging: false,
-    entities: [User, Message],
+    entities: [User, Message, Room],
     migrations: [],
     subscribers: [],
     extra: {

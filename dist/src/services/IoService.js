@@ -16,6 +16,13 @@ class IoService {
     constructor() {
         this.messageRepository = data_source_1.AppDataSource.getRepository(Message_1.Message);
     }
+    /**
+     * Salva uma mensagem no banco de dados.
+     * @param content Conteúdo da mensagem.
+     * @param sender Usuário que enviou a mensagem.
+     * @param recipient Usuário que recebeu a mensagem.
+     * @returns A mensagem salva.
+     */
     saveMessage(content, sender, recipient) {
         return __awaiter(this, void 0, void 0, function* () {
             const message = this.messageRepository.create({
@@ -23,25 +30,27 @@ class IoService {
                 sender,
                 recipient,
             });
-            yield this.messageRepository.save(message);
-            return message;
+            return yield this.messageRepository.save(message);
         });
     }
-    ;
+    /**
+     * Recupera todas as mensagens trocadas entre dois usuários.
+     * @param user1Id ID do primeiro usuário.
+     * @param user2Id ID do segundo usuário.
+     * @returns Lista de mensagens ordenadas pela data de criação.
+     */
     getMessagesBetweenUsers(user1Id, user2Id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.messageRepository.find({
+            return yield this.messageRepository.find({
                 where: [
                     { sender: { id: user1Id }, recipient: { id: user2Id } },
                     { sender: { id: user2Id }, recipient: { id: user1Id } },
                 ],
                 relations: ['sender', 'recipient'],
-                order: { createdAt: 'ASC' },
+                order: { createdAt: 'ASC' }, // Garante a ordenação correta
             });
         });
     }
-    ;
 }
 exports.IoService = IoService;
-;
 //# sourceMappingURL=IoService.js.map

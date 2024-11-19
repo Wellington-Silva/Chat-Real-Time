@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const http_1 = __importDefault(require("http"));
+const path_1 = __importDefault(require("path"));
 require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
@@ -21,6 +22,7 @@ const User_1 = require("./src/entity/User");
 const data_source_1 = require("./data-source");
 const UserRouter_1 = __importDefault(require("./src/routes/UserRouter"));
 const ChatRouter_1 = __importDefault(require("./src/routes/ChatRouter"));
+const RoomRouter_1 = __importDefault(require("./src/routes/RoomRouter"));
 const StatusRouter_1 = __importDefault(require("./src/routes/StatusRouter"));
 const SocketHandler_1 = __importDefault(require("./src/controllers/SocketHandler"));
 const app = (0, express_1.default)();
@@ -32,8 +34,15 @@ const io = new socket_io_1.Server(server, {
         methods: ['GET', 'POST'],
     },
 });
+// Servir arquivos estáticos
+app.use(express_1.default.static(path_1.default.join(__dirname, '../public')));
+// Default route
+app.get('/', (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, './public/chat-client.html'));
+});
 io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
-    SocketHandler_1.default.socketHandler(socket);
+    console.log('Usuário conectado:', socket.id);
+    SocketHandler_1.default.socketHandler(socket, io);
     const userId = socket.handshake.query.userId;
     if (userId) {
         // Definindo o usuário como online
@@ -45,6 +54,7 @@ io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
             console.log(`Usuário ${userId} está offline`);
         }));
     }
+    ;
 }));
 data_source_1.AppDataSource.initialize()
     .then(() => {
@@ -52,6 +62,7 @@ data_source_1.AppDataSource.initialize()
     app.use("/chat", ChatRouter_1.default);
     app.use("/users", UserRouter_1.default);
     app.use("/status", StatusRouter_1.default);
+    app.use("/room", RoomRouter_1.default);
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => console.log(`Server running in port ${PORT}`));
 })

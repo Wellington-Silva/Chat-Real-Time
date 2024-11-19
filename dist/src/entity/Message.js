@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
-// src/entity/Message.ts
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
 let Message = class Message {
@@ -26,17 +25,32 @@ __decorate([
 ], Message.prototype, "content", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => User_1.User, (user) => user.sentMessages),
+    (0, typeorm_1.JoinColumn)({ name: 'senderId' }),
     __metadata("design:type", User_1.User)
 ], Message.prototype, "sender", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => User_1.User, (user) => user.receivedMessages),
+    (0, typeorm_1.JoinColumn)({ name: 'recipientId' }),
     __metadata("design:type", User_1.User)
 ], Message.prototype, "recipient", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Message.prototype, "senderId", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Message.prototype, "recipientId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Message.prototype, "roomId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
     __metadata("design:type", Date)
 ], Message.prototype, "createdAt", void 0);
 exports.Message = Message = __decorate([
     (0, typeorm_1.Entity)()
 ], Message);
+;
 //# sourceMappingURL=Message.js.map

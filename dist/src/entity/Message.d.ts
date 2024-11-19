@@ -4,5 +4,8 @@ export declare class Message {
     content: string;
     sender: User;
     recipient: User;
+    senderId: number;
+    recipientId: number;
+    roomId: string;
     createdAt: Date;
 }

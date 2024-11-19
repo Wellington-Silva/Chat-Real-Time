@@ -40,11 +40,8 @@ class UserService {
     ;
     create(name, picture, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Create hash
             const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
-            // Save
             const user = yield userRepository.createUser({ name, picture, email, password: hashedPassword });
-            // Create token JWT
             const userJWT = {
                 id: user.id,
                 name: user.name,
@@ -56,7 +53,6 @@ class UserService {
                 const token = jsonwebtoken_1.default.sign(userJWT, process.env.JWT_SECRET);
                 // Atualizar o status do usuário para online após a criação
                 yield data_source_1.AppDataSource.getRepository(User_1.User).update(user.id, { isOnline: true });
-                // Retorna o usuário e o token
                 return { user, token };
             }
             ;
@@ -66,7 +62,6 @@ class UserService {
     ;
     signin(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Find user by email
             const user = yield userRepository.findByEmail(email);
             if (!user)
                 return { error: true, message: "Usuário não encontrado" };
@@ -74,7 +69,6 @@ class UserService {
             const isPasswordValid = yield bcryptjs_1.default.compare(password, user.password);
             if (!isPasswordValid)
                 return { error: true, message: "Senha incorreta" };
-            // Create the token JWT
             const userJWT = {
                 id: user.id,
                 name: user.name,
@@ -85,7 +79,6 @@ class UserService {
             const token = jsonwebtoken_1.default.sign(userJWT, process.env.JWT_SECRET);
             // Atualizar o status para online
             yield data_source_1.AppDataSource.getRepository(User_1.User).update(user.id, { isOnline: true });
-            // Return token and basic data of user
             return { token, user: { id: user.id, name: user.name, email: user.email, picture: user.picture } };
         });
     }
