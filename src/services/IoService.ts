@@ -10,7 +10,7 @@ export class IoService {
     private userRepository = AppDataSource.getRepository(User);
 
     async sendMessageToRoom(roomId: string, content: string, senderId: number) {
-        // Buscar a sala
+      
         const room = await this.roomRepository.findOne({ where: { id: roomId } });
         if (!room)
             throw new Error('Room not found');

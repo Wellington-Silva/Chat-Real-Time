@@ -34,16 +34,16 @@ class RoomController {
             return res.status(201).json(room);
         } catch (error) {
             console.error(`Error in RoomController: ${error}`);
-            return res.status(500).json({ error: true, message: error });
+            res.status(500).json({ error: true, message: error });
         }
     };
 
     async listRooms(req: Request, res: Response) {
         try {
             const rooms = await RoomService.getRooms();
-            return res.json(rooms);
+            res.json(rooms);
         } catch (error) {
-            return res.status(500).json({ error: true, message: error });
+            res.status(500).json({ error: true, message: error });
         }
     };
 }

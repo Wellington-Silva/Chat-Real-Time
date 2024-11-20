@@ -16,11 +16,9 @@ class IoController {
             const sender = await AppDataSource.getRepository(User).findOneBy({ id: senderId });
             const recipient = await AppDataSource.getRepository(User).findOneBy({ id: recipientId });
 
-            if (!sender || !recipient) {
+            if (!sender || !recipient)
                 return res.status(404).json({ message: 'Usuário não encontrado' });
-            }
 
-            // Salva a mensagem no banco de dados
             const message = await ioService.saveMessage(content, sender, recipient);
 
             res.status(201).json({ error: false, message });
@@ -34,10 +32,9 @@ class IoController {
         try {
             const { user1Id, user2Id } = req.query;
 
-            // Chama o serviço para obter as mensagens
             const messages = await ioService.getMessagesBetweenUsers(Number(user1Id), Number(user2Id));
 
-            return res.status(200).json(messages);
+            res.status(200).json(messages);
         } catch (e) {
             return res.status(500).json({ error: true, message: 'Erro ao obter histórico de mensagens', e });
         }
