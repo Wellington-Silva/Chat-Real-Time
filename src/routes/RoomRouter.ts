@@ -10,4 +10,6 @@ router.get("/", asyncHandler((req: Request, res: Response) => RoomController.lis
 
 router.post("/sendMessage", asyncHandler((req: Request, res: Response) => RoomController.sendMessageToRoom(req, res)));
 
+router.post("/addMember", asyncHandler((req: Request, res: Response) => RoomController.addMember(req, res)));
+
 export default router;

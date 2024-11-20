@@ -4,6 +4,27 @@ import { IoService } from "../services/IoService";
 
 class RoomController {
 
+    async addMember(req: Request, res: Response) {
+        const { roomId, userId } = req?.query;
+
+        // Garantir que roomId e userId sejam strings
+        const parsedRoomId = String(roomId);
+        const parsedUserId = parseInt(String(userId), 10);
+
+        if (!parsedRoomId || isNaN(parsedUserId))
+            return res.status(400).json({ error: true, message: "roomId e userId são obrigatórios e devem ser válidos." });
+
+        if (!roomId || !userId)
+            return res.status(400).json({ error: true, message: "roomId e userId são obrigatórios." });
+
+        try {
+            const updatedRoom = await RoomService.addMemberToRoom(parsedRoomId, parsedUserId);
+            return res.status(200).json({ success: true, room: updatedRoom });
+        } catch (error) {
+            res.status(500).json({ error: true, message: "Erro ao adicionar participante" });
+        }
+    };
+
     async sendMessageToRoom(req: Request, res: Response) {
         const { roomId } = req.query;
         const { content, senderId } = req.body;
