@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import { User } from '../entity/User';
+import { Room } from "../entity/Room";
 import { IoService } from "../services/IoService";
 import { AppDataSource } from '../../data-source';
 
@@ -38,8 +39,56 @@ class SocketHandler {
                     senderId,
                     createdAt: message.createdAt
                 });
+
+                // Buscar membros da sala e notificar quem não está presente
+                const room = await AppDataSource.getRepository(Room)
+                    .createQueryBuilder('room')
+                    .leftJoinAndSelect('room.members', 'user')
+                    .where('room.id = :roomId', { roomId })
+                    .getOne();
+
+                if (room) {
+                    console.log(`Emitindo evento 'new_group_message' para os membros da sala ${roomId}`);
+                    room.members.forEach((user) => {
+                        if (user.id !== senderId) {
+                            console.log(`Notificação - Nova mensagem do usuário ${user.id} no grupo ${roomId}`);
+                            io.to(user.id.toString()).emit('new_group_message', {
+                                roomId,
+                                content: message.content,
+                                senderId,
+                                createdAt: message.createdAt,
+                            });
+                        }
+                    });
+                };
             } catch (error) {
                 console.error(`Error sending message to room: ${error}`);
+                socket.emit('error', { message: error });
+            }
+        });
+
+        socket.on('send-private-message', async ({ recipientId, content, senderId }: { recipientId: number; content: string; senderId: number }) => {
+            try {
+                const ioServiceInstance = new IoService();
+                const sender = await AppDataSource.getRepository(User).findOneBy({ id: senderId });
+                const recipient = await AppDataSource.getRepository(User).findOneBy({ id: recipientId });
+        
+                if (!sender || !recipient) {
+                    return socket.emit('error', { message: 'Usuário não encontrado' });
+                }
+        
+                const message = await ioServiceInstance.saveMessage(content, sender, recipient);
+                console.log(`Notificação - Nova mensagem para o usuário ${recipientId} de ${senderId}`);
+                
+                // Notificar o destinatário diretamente
+                console.log(`Emitindo evento 'new_private_message' para o usuário ${recipientId}`);
+                io.to(recipientId.toString()).emit('new_private_message', {
+                    content: message.content,
+                    senderId,
+                    createdAt: message.createdAt,
+                });
+            } catch (error) {
+                console.error(`Error sending private message: ${error}`);
                 socket.emit('error', { message: error });
             }
         });
