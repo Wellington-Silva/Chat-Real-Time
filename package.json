@@ -12,9 +12,11 @@
     "typeorm": "ts-node-dev node_modules/.bin/typeorm"
   },
   "dependencies": {
+    "@types/cors": "^2.8.17",
     "@types/nodemon": "^1.19.6",
     "@types/socket.io": "^3.0.2",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",

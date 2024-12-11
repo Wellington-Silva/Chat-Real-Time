@@ -1,6 +1,7 @@
 import "dotenv/config";
 import http from 'http';
 import path from 'path';
+import cors from "cors";
 import "reflect-metadata";
 import express from "express";
 import { Server } from 'socket.io';
@@ -15,6 +16,13 @@ import SocketHandler from "./src/controllers/SocketHandler";
 const app = express();
 app.use(express.json());
 const server = http.createServer(app);
+
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+
+app.use(cors(corsOptions));
 
 const io = new Server(server, {
     cors: {
