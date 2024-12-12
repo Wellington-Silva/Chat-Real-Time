@@ -7,7 +7,7 @@ const ioService = new IoService();
 
 class IoController {
     
-    // Função para enviar mensagem
+    // Função para enviar mensagem em conversa privada
     async sendMessage(req: Request, res: Response) {
         try {
             const { senderId, recipientId, content } = req.body;
@@ -27,7 +27,7 @@ class IoController {
         }
     };
 
-    // Função para obter o histórico de mensagens
+    // Função para obter o histórico de mensagens de uma conversa privada
     async getMessageHistory(req: Request, res: Response) {
         try {
             const { user1Id, user2Id } = req.query;
