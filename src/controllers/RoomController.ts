@@ -67,6 +67,21 @@ class RoomController {
             res.status(500).json({ error: true, message: error });
         }
     };
+
+    async getMessagesHistoryMembers(req: Request, res: Response) {
+        const { roomId } = req?.query;
+
+        if (!roomId)
+            return res.status(400).json({ error: true, message: 'roomId é obrigatório' });
+
+        try {
+            const ioServiceInstance = new IoService();
+            const messages = await ioServiceInstance.getMessagesBetweenMembers(roomId.toString());
+            res.json(messages);
+        } catch (error) {
+            res.status(500).json({ error: true, message: error });
+        }
+    };
 }
 
 export default new RoomController();

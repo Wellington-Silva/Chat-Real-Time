@@ -12,4 +12,6 @@ router.post("/sendMessage", asyncHandler((req: Request, res: Response) => RoomCo
 
 router.post("/addMember", asyncHandler((req: Request, res: Response) => RoomController.addMember(req, res)));
 
+router.get("/historyMembers", asyncHandler((req: Request, res: Response) => RoomController.getMessagesHistoryMembers(req, res)));
+
 export default router;

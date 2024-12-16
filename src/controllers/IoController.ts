@@ -30,9 +30,9 @@ class IoController {
     // Função para obter o histórico de mensagens de uma conversa privada
     async getMessageHistory(req: Request, res: Response) {
         try {
-            const { user1Id, user2Id } = req.query;
+            const { sender, recipient } = req.query;
 
-            const messages = await ioService.getMessagesBetweenUsers(Number(user1Id), Number(user2Id));
+            const messages = await ioService.getMessagesBetweenUsers(Number(sender), Number(recipient));
 
             res.status(200).json(messages);
         } catch (e) {

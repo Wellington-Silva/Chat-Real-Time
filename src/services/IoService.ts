@@ -10,7 +10,7 @@ export class IoService {
     private userRepository = AppDataSource.getRepository(User);
 
     async sendMessageToRoom(roomId: string, content: string, senderId: number) {
-      
+
         const room = await this.roomRepository.findOne({ where: { id: roomId } });
         if (!room)
             throw new Error('Room not found');
@@ -40,24 +40,41 @@ export class IoService {
             recipient,
         });
         return await this.messageRepository.save(message);
-    }
+    };
 
     /**
      * Recupera todas as mensagens trocadas entre dois usuários.
-     * @param user1Id ID do primeiro usuário.
-     * @param user2Id ID do segundo usuário.
+     * @param sender ID do primeiro usuário.
+     * @param recipient ID do segundo usuário.
      * @returns Lista de mensagens ordenadas pela data de criação.
      */
-    async getMessagesBetweenUsers(user1Id: number, user2Id: number) {
+    async getMessagesBetweenUsers(sender: number, recipient: number) {
         return await this.messageRepository.find({
             where: [
-                { sender: { id: user1Id }, recipient: { id: user2Id } },
-                { sender: { id: user2Id }, recipient: { id: user1Id } },
+                { sender: { id: sender }, recipient: { id: recipient } },
+                { sender: { id: recipient }, recipient: { id: sender } },
             ],
             relations: ['sender', 'recipient'],
             order: { createdAt: 'ASC' }, // Garante a ordenação correta
         });
-    }
+    };
+
+    /**
+     * Recupera todas as mensagens trocadas entre membros de uma sala.
+     * @param roomId ID da Sala.
+     * @returns Lista de mensagens ordenadas pela data de criação.
+     */
+    async getMessagesBetweenMembers(roomId: string) {
+        const room = await this.roomRepository.findOne({ where: { id: roomId } });
+
+        if (!room) throw new Error('Sala não encontrada');
+
+        return await this.messageRepository.find({
+            where: { room: { id: roomId } },
+            relations: ['sender', 'room'], // Inclui remetente e sala nas respostas
+            order: { createdAt: 'ASC' },   // Ordena por data de criação
+        });
+    };
 }
 
 // export default new IoService();
