@@ -1,5 +1,5 @@
 # Informativo
-Este é um simples projeto onde é feito a implementação de um chat com socket.io, typescript e nodejs.
+Este é um simples projeto onde é feito a implementação do backend de um chat com socket.io, typescript e nodejs. Neste, é possível enviar mensagens em grupo e em particular. É possível criar grupos, enviar mensagens e receber notificações.
 
 # Tecnologias Utilizadas
 - TypeScript  
@@ -12,7 +12,7 @@ Este é um simples projeto onde é feito a implementação de um chat com socket
 # Requisitos
 
 - **Cadastro e Autenticação de Usuários**   
-Permitir que usuários se cadastrem com informações básicas (nome, e-mail, senha).
+Permitir que usuários se cadastrem com informações básicas.
 Implementar login com autenticação para acesso ao chat, garantindo que apenas usuários autenticados possam utilizar o sistema.
 Utilizar JWT para autenticação segura nas requisições.
 
@@ -52,3 +52,53 @@ Oferecer a opção de bloquear outros usuários para que não possam enviar mens
 Fornecer uma interface para administradores onde eles possam monitorar atividades, gerenciar usuários (incluindo banimento, suspensão), e revisar denúncias de comportamento inadequado.
 Permitir o fechamento de salas e a exclusão de mensagens, conforme necessário para manter a integridade do sistema.
 
+## Estrutura do Projeto
+
+A estrutura de pastas segue o padrão de separação por responsabilidade:
+
+```plaintext
+src
+|-- controller
+|   |-- IoController.ts
+|   |-- RoomController.ts
+|   |-- SocketHandler.ts
+|   |-- StatusController.ts
+|   |-- UserController.ts
+|
+|-- entity
+|   |-- User.ts
+|   |-- Room.ts
+|   |-- Message.ts
+|
+|-- middleware
+|   |-- asyncHandler.ts
+|   |-- jwt.ts
+|
+|-- repository
+|   |-- UserRepository.ts
+|
+|-- routes
+|   |-- ChatRouter.ts
+|   |-- RoomRouter.ts
+|   |-- StatusRouter.ts
+|   |-- UserRouter.ts
+|
+|-- services
+|   |-- IoService.ts
+|   |-- RoomService.ts
+|   |-- UserRouter.ts
+|
+|-- .env
+|-- .gitignore
+|-- data-source.ts
+|-- package-lock.json
+|-- package.json
+|-- README.md
+|-- server.ts
+|-- tsconfig.json
+|-- yarn.lock
+```
+
+## Contribuições
+
+São bem-vindas melhorias, correções e novas funcionalidades. Por favor, envie um pull request ou abra uma issue para discutirmos sua proposta.
